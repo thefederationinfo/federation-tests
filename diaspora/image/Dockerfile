@@ -16,7 +16,7 @@ RUN mkdir /tmp/ruby && cd /tmp/ruby \
 
 RUN gem install bundler
 
-RUN git clone --depth 1 https://github.com/diaspora/diaspora.git
+RUN git clone --depth 1 https://github.com/diaspora/diaspora.git -b master
 
 WORKDIR /diaspora
 
