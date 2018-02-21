@@ -28,6 +28,7 @@ RUN bundle install --with postgresql
 RUN sed -i "s/#rails_environment:.*/rails_environment: 'production'/" config/diaspora.yml
 RUN sed -i "s/#url:/url:/" config/diaspora.yml
 RUN sed -i "0,/#certificate_authorities/ s/#certificate_authorities:/certificate_authorities:/" config/diaspora.yml
+RUN sed -i "s/#require_ssl:.*/require_ssl: false/" config/diaspora.yml
 
 RUN bundle exec rake db:create db:migrate assets:precompile
 
@@ -36,5 +37,3 @@ RUN tar -xvzf redis-stable.tar.gz
 RUN cd redis-stable && make
 RUN cd redis-stable && make install
 RUN rm -rf redis-stable
-
-RUN sed -i "s/#require_ssl:.*/require_ssl: false/" config/diaspora.yml
