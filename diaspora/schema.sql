@@ -1,10 +1,3 @@
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 10.1
--- Dumped by pg_dump version 10.1
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -13,71 +6,83 @@ SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
-
 SET search_path = public, pg_catalog;
-
-
---
--- Data for Name: people; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
+COPY pods (id, host, ssl, created_at, updated_at, status, checked_at, offline_since, response_time, software, error, port, blocked, scheduled_check) FROM stdin;
+1	pod.diaspora.software	t	2018-02-21 19:09:54.076511	2018-02-21 19:09:54.486298	1	1970-01-01 00:00:00	\N	-1	\N	\N	\N	f	f
+\.
 COPY people (id, guid, diaspora_handle, serialized_public_key, owner_id, created_at, updated_at, closed_account, fetch_status, pod_id) FROM stdin;
-1	2d4fa7e0e5380135fa593c970e8692NAME	NAME@localhost:PORT	-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAp7nqLKGcKJY12UwNoNXu\nLr/aD0dLiKB+t0F+dcd1bllZE8wBXwWcUtd4g91YxtKniFxY810ov554lzk4uG63\nLIkyQY6wQMVWAxl9xd4lEirF4qLbO2Z2BzOcoRcu86DTppxrFHJ9VA78aWfyXFnH\n69SHmaq4p3HolN3Z64wFFtHuQ94XAxuDDtKkx7NX91tXj9/W9pEJSSxny8mlNZDB\nT7tDmV3ZgDdorq3tBT4h57/MQZquo3UE0V4g44yYP6jqhb+yS20QnO+0EB8plMAk\n0+e8qD885xZxoNvyEx7wUL4XyFYFrMNBQPjXCrwOHc/Wxs5m7t7HKLcTCzq3DX/q\nYmB4647awHfPa8GfdOsfaaKcnw0KEzf2Ekt/FNwkdKpS1aNGmuZs64x0zvDW9AFZ\nIxBZEu0TbTkovcuRoG1QDDzrDs3v9s7obEZh/Dmcn1jV9htGHRnqCVGVreDxVd5Y\nE19+7sKIkVK9PP3BYxrB6q/Kp8xbBGWdgRuhV+sszmSHi5u47oTg4mFfmzu7szpv\nzm0eIvryHD2wf9t0DDggCNNHzcRruR983h3dElfk37beKxon9r5XWbIeQkZYyaj1\nUcNV9q3P6Y00n00MqMt2sSFZS5gRvbigd/VUVcCqrsVwLtBU2NLogBKgpQW/OKo/\nuvVC3r23765SqzBLwSqvubMCAwEAAQ==\n-----END PUBLIC KEY-----\n	1	2018-01-27 02:32:01.197194	2018-01-27 02:32:01.197194	f	0	\N
+1	b81ca1f0f96801351c6f5296f2e7447bNAME	NAME@localhost:PORT	-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAn+oAMwYDZMSxYSrblICT\n/DIvXcYCOVLeFhdzgPqMmXvNi8BNIG89Y5dJbLeaye2sTsbCJ1K2YebgYtuVi4RQ\nqzC0iaIiamKZldF34cHgjuWSoHdTCMXXNPReEsu/7LEATsV3wC02YOyAIKSScMAn\ncbBeYCIiqf6YMEN5prprU1kt8CSB1wzkA3mnrUpdq4jsNxhi4/DmddGZiBpBE8rp\nIAwZxiQlgvQd5hSBCjDIb9REDaVYN/rf0wvcJgz9jWHNYxpgKm8rQMP+hFg3wan9\n0aOlacq4XADLaxCUhA5xA+VlFUdTt2EWmj+z/psokeXfxEhb1I0ZGR/8jcwUFETM\nwEARWTWuNtzBgVcBbUS6WzlgoLIZDL8staqVbX5pqB5pl4NRR0jGrSABXliy3hfY\nBv5eTfLzBAd2hlj2eXhK8iuJrsxFf5RYJpdBD0bw0vEH01ygYNQV9h0+CQ2nt2/u\nWNLoDVB6rNSynY4aEsWQ8kNo39vRs61pGEXVVBYeQJ7TS03q/MpgRjGVElcdPJZQ\nbR9fNw4g4FwrudGyy0XppkrH4AuPI9iqdoRjVnNC4GEW2GBxueLebnwk5e4ZPjYo\npSnTcxaqDXna4OR2XIhdJdoTl9ZQ9M4Ys4QB31IaiOS5gPtStI1sbEpzIlf4y4Za\nlJJ6u50OOxyUwX5e8vuQ4d8CAwEAAQ==\n-----END PUBLIC KEY-----\n	1	2018-02-21 19:09:53.741066	2018-02-21 19:09:53.741066	f	0	\N
+2	7bca7c80311b01332d046c626dd55703	hq@pod.diaspora.software	-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAnRrtHuUwbXHXjRCypB2Q\nRv55JOsaNAVKJid5pc0FuxQ0rLK/vNXi/7fplMm4HHTwmeuK9eXZoQyvoH+qBVv6\nbFZ8KP0M95QcrOSJtvvKYm51ybO82/W/e2LLKNfLMgTq2uoCWJsq33fohRXFgpCZ\nAz+aeK41YdxCnXUkd2tZBK44dv+tHZJOXFIr0KZFLeWCEbryL5367JSe2Qjj6N4B\nWktt4dLpWO8J0HP5SiGhxTM/WUqKu3rCHtPyOWMTZz0f6R595ZOh04cwo+4iqJB2\nKvlsQAEsDfHnICNidRmSxTghn3QquYZS5N/3sKGpayOzC0GGo2g7eK7oX3ZzBGHq\nu0f4whcdq055MAGjg4pjJu1EYfMDux7Ik8JHyVinsVAvjIHbVeurWe8oMtriQ3pB\nFNIjR8SH1JNaZ1PSdIO8V/j0C24wa77jvN2AdZFdCoAvpXSd33fexwMd5vpuyfYB\naq2jOze+Hb0lxIsxOvpv2Vf76Zuc86lHYBNjB/n+e8aoDIqIMjvr+DSMsNpHHi3k\ntuEXcs0gomoOO6A2EeMdO4M57EP4S4yLaKtCNDLGNbR6rxagrxctLeylh0/a1IyS\nmUrPD6mYt9mjbmNrRpAGFS4n8KPoeqZSVdvb3bcyY2ewwYD2xAeKymiy9jxKPujK\nD2X2Zb3zifqQzfgAf2k44MECAwEAAQ==\n-----END PUBLIC KEY-----\n	\N	2018-02-21 19:09:54.093913	2018-02-21 19:09:54.093913	f	0	1
 \.
-
-
---
--- Data for Name: ar_internal_metadata; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
 COPY ar_internal_metadata (key, value, created_at, updated_at) FROM stdin;
-environment	production	2018-02-21 15:16:54.311527	2018-02-21 15:16:54.311527
+environment	production	2018-02-21 19:09:03.106945	2018-02-21 19:09:03.106945
 \.
-
-
---
--- Data for Name: aspects; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
 COPY aspects (id, name, user_id, created_at, updated_at, contacts_visible, order_id, chat_enabled, post_default) FROM stdin;
-1	Family	1	2018-01-27 02:32:01.263642	2018-01-27 02:32:01.263642	t	1	f	t
-2	Friends	1	2018-01-27 02:32:01.281543	2018-01-27 02:32:01.281543	t	2	f	t
-3	Work	1	2018-01-27 02:32:01.300581	2018-01-27 02:32:01.300581	t	3	f	t
-4	Acquaintances	1	2018-01-27 02:32:01.313774	2018-01-27 02:32:01.313774	t	4	f	t
+1	Family	1	2018-02-21 19:09:53.791664	2018-02-21 19:09:53.791664	t	1	f	t
+2	Friends	1	2018-02-21 19:09:53.804478	2018-02-21 19:09:53.804478	t	2	f	t
+3	Work	1	2018-02-21 19:09:53.816461	2018-02-21 19:09:53.816461	t	3	f	t
+4	Acquaintances	1	2018-02-21 19:09:53.828097	2018-02-21 19:09:53.828097	t	4	f	t
 \.
-
-
---
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
+COPY contacts (id, user_id, person_id, created_at, updated_at, sharing, receiving) FROM stdin;
+1	1	2	2018-02-21 19:09:54.146627	2018-02-21 19:09:54.146627	f	t
+\.
+COPY aspect_memberships (id, aspect_id, contact_id, created_at, updated_at) FROM stdin;
+1	4	1	2018-02-21 19:09:54.148996	2018-02-21 19:09:54.148996
+\.
 COPY users (id, username, serialized_private_key, getting_started, disable_mail, language, email, encrypted_password, reset_password_token, remember_created_at, sign_in_count, current_sign_in_at, last_sign_in_at, current_sign_in_ip, last_sign_in_ip, created_at, updated_at, invited_by_id, authentication_token, unconfirmed_email, confirm_email_token, locked_at, show_community_spotlight_in_stream, auto_follow_back, auto_follow_back_aspect_id, hidden_shareables, reset_password_sent_at, last_seen, remove_after, export, exported_at, exporting, strip_exif, exported_photos_file, exported_photos_at, exporting_photos, color_theme, post_default_public) FROM stdin;
-1	NAME	-----BEGIN RSA PRIVATE KEY-----\n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\n-----END RSA PRIVATE KEY-----\n	f	f	en	NAME@test.de	$2a$10$qV8jzGwV99agKj2flKzqFu1H8akLPS6jfzKnkc7YcpRuxz932rr2.	\N	\N	1	2018-01-27 02:32:01.321835	2018-01-27 02:32:01.321835	127.0.0.1	127.0.0.1	2018-01-27 02:32:01.184283	2018-01-27 02:33:20.131561	\N	a_igUxzq2o9y4V9zWXdPhg582u3hNA	\N	\N	\N	t	f	\N	\N	\N	2018-01-27 02:32:01.331007	\N	\N	\N	f	t	\N	\N	f	original	f
+1	NAME	-----BEGIN RSA PRIVATE KEY-----\nMIIJKQIBAAKCAgEAn+oAMwYDZMSxYSrblICT/DIvXcYCOVLeFhdzgPqMmXvNi8BN\nIG89Y5dJbLeaye2sTsbCJ1K2YebgYtuVi4RQqzC0iaIiamKZldF34cHgjuWSoHdT\nCMXXNPReEsu/7LEATsV3wC02YOyAIKSScMAncbBeYCIiqf6YMEN5prprU1kt8CSB\n1wzkA3mnrUpdq4jsNxhi4/DmddGZiBpBE8rpIAwZxiQlgvQd5hSBCjDIb9REDaVY\nN/rf0wvcJgz9jWHNYxpgKm8rQMP+hFg3wan90aOlacq4XADLaxCUhA5xA+VlFUdT\nt2EWmj+z/psokeXfxEhb1I0ZGR/8jcwUFETMwEARWTWuNtzBgVcBbUS6WzlgoLIZ\nDL8staqVbX5pqB5pl4NRR0jGrSABXliy3hfYBv5eTfLzBAd2hlj2eXhK8iuJrsxF\nf5RYJpdBD0bw0vEH01ygYNQV9h0+CQ2nt2/uWNLoDVB6rNSynY4aEsWQ8kNo39vR\ns61pGEXVVBYeQJ7TS03q/MpgRjGVElcdPJZQbR9fNw4g4FwrudGyy0XppkrH4AuP\nI9iqdoRjVnNC4GEW2GBxueLebnwk5e4ZPjYopSnTcxaqDXna4OR2XIhdJdoTl9ZQ\n9M4Ys4QB31IaiOS5gPtStI1sbEpzIlf4y4ZalJJ6u50OOxyUwX5e8vuQ4d8CAwEA\nAQKCAgANlNQbgUE8h7AA7qDjheALpT98mVqK/8y415kJtT3Hs0oLunNSc+Ak2y5z\nO0y8JaFit2K58D5pJjCcdMXIqZ4oS+SpY8nEe0dMABRMaijmOf0v/7Jfpl3Ws4Jh\n2kgclBPQnNjEy5I4vR1MqG1/gfJXp4D8bSnAgkzunGxyipae544NPSyB1ShwWx6w\niwZVkTVuoHWVoloQW5LMil5Ijg0qmZx+xYciDhWT+t3Svb3oMYDuH8LUTkxAIlu6\nJ5RJM6s75XuRXwuvXnX5S3zAx+00ps9fosXxmmesWiYi6Q8UI6FoIzyq8GX5B7wD\nva2+ZmWQyAx0it880QikClcSOZ2h++/SsefmfX54y7CKEL0FBOtT+ZusRDw9qWtK\nz+FmCCUDB7bdwJ3ia9MbTZ2UTlJ8cnTZScBafd3bGPlFyU6CynPRl4ms1SF8LsAI\nd/AFd85jJ/9pvL9NSWxxdARkxYfBP77R2XkzPSBGAmwOLXu+03kHMuw1OWRf51ci\ndlRqHbUzpzvXH0Dtoh/YKFPVmTniRR0K0IMKYfA60UoUBLfPXed7tx35C9OCmMmM\nBhYrNYDAKQJRLGuDzB9rw8c2on+quakDSkSfFGXtOWfUGrU22xrWDY8Dui7N1rKZ\nd2IposCD+7r6sWDnpZH6RKJOam3WX0xW4Zh7LDWAFicGYE0V0QKCAQEAzUOxwFF8\n8q4xnuQ/dKNeVPFlPL4g0+ZL1IyJIab27TEUWAGZnwifdNRsLFVkZZJ7mhCQcfnj\nuOar1CVQabra5mnH1rFLCOOBkFN3b2PjLXKrozd4QBdtgCFu3qeV1xxAcg+m2iKU\nLUtyHqx82JycWKVfHuyyX5m7lAPNBP68kJOa7rBrvSUS7yDqF1lXlQpYqrBSIjcD\n/y7v9pkYds+6qYS3XZhZThfCIS7lzO9kBe6WCS73s1XIElQ7v6E0jIJWwHySbOgn\ncH7uJXQwa46YOLXR3stFGmzfZwDeaU1Yk0C0C1g8Vk6QGiPzWBtSEjQNKunAJw7p\nArHkNYKy2XWvawKCAQEAx3C32DiOncYe9Whvhlu2nfTZLFVoeUedLjTZ6fNzB6/D\n/JYqPMEiGmjeo4ovSIrGfwMmhoJEiidP2y0FP01lUp5h4jQPzgonuthJvw83tK/4\nm/KgFb1/SibdUB92aZtrSBj+aVNfSPRo2cMbJOLYBdCIvjWrxj1Rq1Tk6xeVnpud\nCOBPmTu2G9fbtTuqRLlc5U6WSwjpSdNzmBe041im1jUxwjcss2PFk062BloMm124\nGGlifDgmwIC7siY+BD42bw366Zm68JGAh2ZeZ5+o75HI5G6J1w/RSNyRsqNhNprN\nS0b7vYc66d1PoHK4nXDo284lOd38be5w8Jf4yEJ4XQKCAQEAxLbGZ6/wlcaY6VSG\n96oFIlTBl8gCP/Ep5QXV+flAFap+e6T063NhFZ7qGEax06HhcJHFTGWWdsIiFEq6\nWMlpNX5UtQzuAxO9PGqxQIAy3IBTuzTSumF5YF0qGpnywNdjb6xOVCjlZs8yC/F0\nKEdWkqHRmhpvC62SFdTaq5nRbqD2zx8l8XvRPHiHv16wz7W9qb8Wx5F/9BOwhtzL\nlDmaAxGchUcW9v9P3WtLce5OJl0zTpPDcQuZlO9C33CHoszahNgdn9+QxH/wjNZf\n/QQIH/knq2OU0zFZnCY6ACLO6zgME/84u+HIujSP5nUwXx+hKuofa48fgaSoNxwN\neNgPBwKCAQEAo8uvMaVBe9J7GpHrBi3MjW3J7t82LmTiclB1p+6JSobQL2IkzkDQ\nAWCfeTDEJI/U9ftgaJgUMmKW8yrGZHbsAC6TtXOMh2tPteRsrL2SwpLDW1CoqTI4\nmG3S1TsBxTofodblGxud5gzVEANtB55GTIA3zf/GU8mIiW3vlCSKfPjQv7l5ph+k\nMLnXd8DI1ihmYu1oAbgP4NII3aCarxzf6I1HkHo//BS074Z1eEH8mJ0f1Oy4Nczo\nBrGzdVxzEokFq6+Posre/TSCmrE4V2KJHDhfBTzDeB1FhNGh11TXQkFg2bIyjjXB\n7NAV1XBirutMUzm62Qu3hZGOsAogCFiPAQKCAQBVcrAoIH4i+5sd6jwzOVk5c24L\nIDtn2X68ZoMSFRT3jCSnLrPsMqxHbTrkha623eAke/XXtqXy8OJx89uC7lptB9/D\nNgqegAKJBhrYEm4lCh3Qnh+e/mAz+yHvdTXmqYrgxcRXtqYMqMsdZwwlij9U7HhO\nd2/kc/Hp3IaTnL3O1F/OvSHKFRA9t7xsQxFaRW2ANRdHfkGZyrQjXMqugFbOtmnM\nSm3M+MdyVhvUyjCC/oAsvR1jNACxn1uHnk6cAF9Dcn68szWuuFb62uLGs15YmqI4\n5wMkM42Wlg05vc33v8PXkyFcFQrz2iboEQYpeOElnzXH9JIBt8J1B5mgvDB0\n-----END RSA PRIVATE KEY-----\n	t	f	en	NAME@test.de	$2a$10$YoYB8icyOfr9GF7lyHCcHekmSgxzXh7oM1jkZB9eo4Qx2/ldtX516	\N	\N	1	2018-02-21 19:09:54.168178	2018-02-21 19:09:54.168178	127.0.0.1	127.0.0.1	2018-02-21 19:09:53.732021	2018-02-21 19:09:54.187634	\N	\N	\N	\N	\N	t	f	\N	\N	\N	2018-02-21 19:09:54.178565	\N	\N	\N	f	t	\N	\N	f	original	f
 \.
-
-
---
--- Data for Name: invitation_codes; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
 COPY invitation_codes (id, token, user_id, count, created_at, updated_at) FROM stdin;
-1	21d5740b9cdd	1	25	2018-01-27 02:32:01.497205	2018-01-27 02:32:01.497205
+1	e9a8deed0451	1	25	2018-02-21 19:09:54.394384	2018-02-21 19:09:54.394384
 \.
-
-
---
--- Data for Name: profiles; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
 COPY profiles (id, diaspora_handle, first_name, last_name, image_url, image_url_small, image_url_medium, birthday, gender, bio, searchable, person_id, created_at, updated_at, location, full_name, nsfw, public_details) FROM stdin;
-1	\N	\N	\N	\N	\N	\N	\N	\N	\N	t	1	2018-01-27 02:32:01.201093	2018-01-27 02:32:01.201093	\N		f	f
+1	NAME@localhost:PORT	NA	ME	\N	\N	\N	\N	\N	\N	t	1	2018-02-21 19:09:53.745056	2018-02-21 19:09:53.745056	\N		f	f
+2	\N	diaspora* HQ	\N	https://pod.diaspora.software/uploads/images/thumb_large_0f0e529bef78176741dc.png	https://pod.diaspora.software/uploads/images/thumb_small_0f0e529bef78176741dc.png	https://pod.diaspora.software/uploads/images/thumb_medium_0f0e529bef78176741dc.png	\N	\N	\N	t	2	2018-02-21 19:09:54.096031	2018-02-21 19:09:54.096031	\N	diaspora* hq	f	f
 \.
-
-
---
--- Data for Name: simple_captcha_data; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY simple_captcha_data (id, key, value, created_at, updated_at) FROM stdin;
-2	e99c956d879719b7774625a711c3e1c2b7aa1725	54298	2018-01-27 02:33:29.528515	2018-01-27 02:33:29.528515
-\.
+SELECT pg_catalog.setval('account_deletions_id_seq', 1, false);
+SELECT pg_catalog.setval('account_migrations_id_seq', 1, false);
+SELECT pg_catalog.setval('aspect_memberships_id_seq', 1, true);
+SELECT pg_catalog.setval('aspect_visibilities_id_seq', 1, false);
+SELECT pg_catalog.setval('aspects_id_seq', 4, true);
+SELECT pg_catalog.setval('authorizations_id_seq', 1, false);
+SELECT pg_catalog.setval('blocks_id_seq', 1, false);
+SELECT pg_catalog.setval('chat_contacts_id_seq', 1, false);
+SELECT pg_catalog.setval('chat_fragments_id_seq', 1, false);
+SELECT pg_catalog.setval('chat_offline_messages_id_seq', 1, false);
+SELECT pg_catalog.setval('comments_id_seq', 1, false);
+SELECT pg_catalog.setval('contacts_id_seq', 1, true);
+SELECT pg_catalog.setval('conversation_visibilities_id_seq', 1, false);
+SELECT pg_catalog.setval('conversations_id_seq', 1, false);
+SELECT pg_catalog.setval('invitation_codes_id_seq', 1, true);
+SELECT pg_catalog.setval('likes_id_seq', 1, false);
+SELECT pg_catalog.setval('locations_id_seq', 1, false);
+SELECT pg_catalog.setval('mentions_id_seq', 1, false);
+SELECT pg_catalog.setval('messages_id_seq', 1, false);
+SELECT pg_catalog.setval('notification_actors_id_seq', 1, false);
+SELECT pg_catalog.setval('notifications_id_seq', 1, false);
+SELECT pg_catalog.setval('o_auth_access_tokens_id_seq', 1, false);
+SELECT pg_catalog.setval('o_auth_applications_id_seq', 1, false);
+SELECT pg_catalog.setval('o_embed_caches_id_seq', 1, false);
+SELECT pg_catalog.setval('open_graph_caches_id_seq', 1, false);
+SELECT pg_catalog.setval('participations_id_seq', 1, false);
+SELECT pg_catalog.setval('people_id_seq', 2, true);
+SELECT pg_catalog.setval('photos_id_seq', 1, false);
+SELECT pg_catalog.setval('pods_id_seq', 1, true);
+SELECT pg_catalog.setval('poll_answers_id_seq', 1, false);
+SELECT pg_catalog.setval('poll_participations_id_seq', 1, false);
+SELECT pg_catalog.setval('polls_id_seq', 1, false);
+SELECT pg_catalog.setval('posts_id_seq', 1, false);
+SELECT pg_catalog.setval('ppid_id_seq', 1, false);
+SELECT pg_catalog.setval('profiles_id_seq', 2, true);
+SELECT pg_catalog.setval('references_id_seq', 1, false);
+SELECT pg_catalog.setval('reports_id_seq', 1, false);
+SELECT pg_catalog.setval('roles_id_seq', 1, false);
+SELECT pg_catalog.setval('services_id_seq', 1, false);
+SELECT pg_catalog.setval('share_visibilities_id_seq', 1, false);
+SELECT pg_catalog.setval('signature_orders_id_seq', 1, false);
+SELECT pg_catalog.setval('simple_captcha_data_id_seq', 1, true);
+SELECT pg_catalog.setval('tag_followings_id_seq', 1, false);
+SELECT pg_catalog.setval('taggings_id_seq', 1, false);
+SELECT pg_catalog.setval('tags_id_seq', 1, false);
+SELECT pg_catalog.setval('user_preferences_id_seq', 1, false);
+SELECT pg_catalog.setval('users_id_seq', 1, true);
