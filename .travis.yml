@@ -1,5 +1,8 @@
 sudo: required
-language: bash
+# have to use a different language otherwise
+# the minimalistic image is used and postgres
+# and docker are missing
+language: go
 services:
 - postgresql
 - docker
@@ -7,4 +10,4 @@ install:
 - git clone --depth 1 https://github.com/sstephenson/bats.git
 - cd bats && sudo ./install.sh /usr/local
 script:
-- bats --tap .
+- cd $TRAVIS_BUILD_DIR && bats --tap .
