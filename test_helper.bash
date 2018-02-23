@@ -1,5 +1,23 @@
-curl_params="/tmp/curl_params"
+export btf=$(basename $BATS_TEST_FILENAME)
 
+# will run on every test and
+# verify installed dependencies
+function setup() {
+  # postgresql client
+  command -v psql
+  [ "$?" -eq 0 ]
+  # curl http client
+  command -v curl
+  [ "$?" -eq 0 ]
+  # json parser
+  command -v jq
+  [ "$?" -eq 0 ]
+  # git binary
+  command -v git
+  [ "$?" -eq 0 ]
+}
+
+curl_params="/tmp/curl_params"
 # fetch "POST" "data1=one&data2=two" "http://server/endpoint"
 function fetch() {
   tmp=$(mktemp)
@@ -53,4 +71,26 @@ function wait_for() {
 # query "g1" "select count(*) from posts;"
 function query() {
   psql -t -d $1 -U postgres -c "$2" |tr -d '\n\r '
+}
+
+# json_value "ID"
+function json_value() {
+  echo $HTTP_BODY | jq -r ".$1"
+}
+
+# latest_tag "diaspora"
+function latest_tag() {
+  git tag |sort -r |while read tag; do
+    label=$(echo $tag |cut -d- -f2)
+    if [ "$label" == "$1" ]; then
+      echo $tag
+      return
+    fi
+  done
+  echo null
+}
+
+# rails_runner "d1" "puts 'Hello World!'"
+function rails_runner() {
+  docker exec $1 bundle exec rails runner "$2"
 }
