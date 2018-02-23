@@ -1,7 +1,7 @@
 FROM debian:jessie
 ENV DEBIAN_FRONTEND noninteractive
 
-ENV VERSION v0-alpha.41
+ENV VERSION v0-alpha.42
 ENV BIN updater.linux-amd64.alpha
 
 RUN apt-get update
@@ -16,7 +16,9 @@ RUN curl -LO https://github.com/ganggo/ganggo/releases/download/${VERSION}/${BIN
 RUN apt-get -y purge curl
 RUN apt-get clean && apt-get autoclean
 
-COPY app.conf /ganggo/app.conf
 RUN chmod +x /ganggo/${BIN}
 
-CMD ["sh", "-c", "/ganggo/${BIN} -channel disable -mode dev"]
+COPY start.sh /start.sh
+COPY app.conf /ganggo/app.conf
+
+CMD ["/bin/bash", "/start.sh"]
