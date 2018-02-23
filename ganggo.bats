@@ -84,15 +84,12 @@ endpoint="http://localhost:9000"
   [ "$HTTP_STATUS_CODE" == "000200" ]
 
   # check post in diaspora
-  cmd="psql -t -d d1 -U postgres -c 'select count(*) from posts;' |tr -d '\n\r '"
-  code=$(wait_for $cmd "1")
+  function cmd() {
+    query "d1" "select count(*) from posts;"
+  }
+  code=$(wait_for cmd "1")
   echo "expected 0, got $code"
   [ "$code" -eq "0" ]
-
-#  values.Set("comment", msg)
-#  t.POST(fmt.Sprintf(
-#    "/api/v0/posts/%d/comments", post.ID), values)
-
 }
 
 @test "stop and delete containers" {

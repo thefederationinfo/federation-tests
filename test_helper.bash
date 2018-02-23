@@ -39,11 +39,18 @@ function remove_app() {
 
 # wait_for "docker logs g1" "Listening on"
 function wait_for() {
+  command -v $1 >/dev/null
+  if [ "$?" -ne 0 ]; then echo 1; return; fi
   while true; do
-    eval "$1" |grep -m 1 "$2" >/dev/null
+    $1 |grep -m 1 "$2" >/dev/null
     if [ "$?" -eq 0 ]; then echo 0; break; fi
-    if [ "$i" -eq 300 ]; then echo 1; break; fi
+    if [ "$i" -eq 250 ]; then echo 1; break; fi
     ((i++))
     sleep 2
   done
+}
+
+# query "g1" "select count(*) from posts;"
+function query() {
+  psql -t -d $1 -U postgres -c "$2" |tr -d '\n\r '
 }
