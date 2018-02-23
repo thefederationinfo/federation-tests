@@ -1,0 +1,10 @@
+sudo: required
+language: bash
+services:
+- postgresql
+- docker
+install:
+- git clone --depth 1 https://github.com/sstephenson/bats.git
+- cd bats && sudo ./install.sh /usr/local
+script:
+- bats --tap .
