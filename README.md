@@ -1,25 +1,39 @@
 # Federation Tests
 
-This repository is about automating federation unit tests.
+This repository is about automating federation tests in the network itself (see [the-federation.info](http://the-federation.info/)).
 
-If you want to use travis, this could look like following:
+# Layout
+
+Every image has to accept and use following parameters:
+
+    PORT=\d+
+    DATABASE=[\w\d]+
+
+`DATABASE` represents the name of the docker container and the database name.  
+`PORT` should be an unused port (check already existing container). All docker container will be executed with `--net=host` and will share the same network host. Therefore a unique port number is mandatory!
+
+The test helper will call docker like following:
+
+    docker run --name=$1 -e DATABASE=$1 -e PORT=$2 -p $2:$2 --net=host -d thefederation/$3
+    
+Starting a GangGo and Diaspora application server is then possible by writing tests like this:
 
 ```
-sudo: required
-services:
-- docker
-- postgresql
+@test "start ganggo#1 server" {
+  start_app "g1" "9000" "testing_ganggo:v1.0.0-ganggo"
+  [ "$?" -eq 0 ]
+  code=$(wait_for "docker logs g1" "Listening on")
+  echo "expected 0, got $code"
+  [ "$code" -eq "0" ]
+}
 
-[...]
-
-install:
-- docker run --name=d1 -e DATABASE=d1 -e PORT=3000 -p 3000:3000 --net=host -d thefederation/testing_diaspora:latest
-script:
-- curl http://localhost:3000/hcard/users/2d4fa7e0e5380135fa593c970e8692d1
+@test "start diaspora#1 server" {
+  start_app "d1" "3000" "testing_diaspora:v1.0.3-diaspora"
+  [ "$?" -eq 0 ]
+  code=$(wait_for "docker logs d1" "Starting Diaspora in production")
+  echo "expected 0, got $code"
+  [ "$code" -eq "0" ]
+  # unicorn timeout
+  sleep 15
+}
 ```
-
-## Projects
-
-For reference implementation you can checkout following projects:
-
-* [github.com/ganggo/ganggo](https://github.com/ganggo/ganggo)
