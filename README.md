@@ -1,4 +1,4 @@
-# Federation Tests
+# Federation Tests [![](https://travis-ci.org/thefederationinfo/federation-tests.svg?branch=master)](https://travis-ci.org/thefederationinfo/federation-tests)
 
 This repository is about automating federation tests in the network itself (see [the-federation.info](http://the-federation.info/)).
 
