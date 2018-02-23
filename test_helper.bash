@@ -1,3 +1,5 @@
+export btf=$(basename $BATS_TEST_FILENAME)
+
 # will run on every test and
 # verify installed dependencies
 function setup() {
@@ -86,4 +88,9 @@ function latest_tag() {
     fi
   done
   echo null
+}
+
+# rails_runner "d1" "puts 'Hello World!'"
+function rails_runner() {
+  docker exec $1 bundle exec rails runner "$2"
 }

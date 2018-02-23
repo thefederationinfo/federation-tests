@@ -7,12 +7,12 @@ load test_helper
 
 endpoint="http://localhost:9000"
 
-@test "create database" {
+@test "$btf create database" {
   psql -U postgres -c "create database g1;"
   [ "$?" -eq 0 ]
 }
 
-@test "start ganggo#1 server" {
+@test "$btf start ganggo#1 server" {
   start_app "g1" "9000" "testing_ganggo:"$(latest_tag "ganggo")
   [ "$?" -eq 0 ]
   code=$(wait_for "docker logs g1" "Listening on")
@@ -20,7 +20,7 @@ endpoint="http://localhost:9000"
   [ "$code" -eq "0" ]
 }
 
-@test "start diaspora#1 server" {
+@test "$btf start diaspora#1 server" {
   start_app "d1" "3000" "testing_diaspora:"$(latest_tag "diaspora")
   [ "$?" -eq 0 ]
   code=$(wait_for "docker logs d1" "Starting Diaspora in production")
@@ -30,14 +30,18 @@ endpoint="http://localhost:9000"
   sleep 15
 }
 
-@test "create user" {
+@test "$btf create user" {
   post "username=g1&password=pppppp&confirm=pppppp" "$endpoint/users/sign_up"
   echo "expected 302, got $HTTP_STATUS_CODE"
   [ "$HTTP_STATUS_CODE" == "000302" ]
 }
 
+@test "$btf create diaspora user" {
+  skip "exists already"
+}
+
 # according to https://ganggo.github.io/api/#api-Oauth-ApiOAuth_Create
-@test "fetch user token" {
+@test "$btf fetch user token" {
   post "grant_type=password&username=g1&password=pppppp&client_id=bats" \
        "$endpoint/api/v0/oauth/tokens"
   echo "expected 200, got $HTTP_STATUS_CODE"
@@ -49,7 +53,7 @@ endpoint="http://localhost:9000"
   echo "-H access_token:$token" > $curl_params
 }
 
-@test "setup user relations" {
+@test "$btf setup user relations" {
   # search and discover a person
   post "handle=d1@localhost:3000" "$endpoint/api/v0/search"
   echo "expected 200, got $HTTP_STATUS_CODE"
@@ -135,22 +139,22 @@ function send_type() {
   [ "$code" -eq "0" ]
 }
 
-@test "create public entities and check federation" {
+@test "$btf create public entities and check federation" {
   send_type public
 }
 
-@test "create private entities and check federation" {
+@test "$btf create private entities and check federation" {
   send_type private
 }
 
-@test "stop and delete containers" {
+@test "$btf stop and delete containers" {
   stop_app "g1 d1"
   [ "$?" -eq 0 ]
   remove_app "g1 d1"
   [ "$?" -eq 0 ]
 }
 
-@test "drop databases" {
+@test "$btf drop databases" {
   psql -U postgres -c "drop database g1;"
   [ "$?" -eq 0 ]
   psql -U postgres -c "drop database d1;"
