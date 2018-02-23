@@ -29,6 +29,7 @@ RUN sed -i "s/#rails_environment:.*/rails_environment: 'production'/" config/dia
 RUN sed -i "s/#url:/url:/" config/diaspora.yml
 RUN sed -i "0,/#certificate_authorities/ s/#certificate_authorities:/certificate_authorities:/" config/diaspora.yml
 RUN sed -i "s/#require_ssl:.*/require_ssl: false/" config/diaspora.yml
+RUN sed -i "s/#serve:.*/serve: true/" config/diaspora.yml
 
 RUN bundle exec rake db:create db:migrate assets:precompile
 
