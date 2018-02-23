@@ -73,12 +73,49 @@ endpoint="http://localhost:9000"
   # create post via ganggo
   post "post=helloworld&aspectID=0" "$endpoint/api/v0/posts"
   echo "expected 200, got $HTTP_STATUS_CODE"
-  echo "body = $HTTP_BODY"
   [ "$HTTP_STATUS_CODE" == "000200" ]
-
+  postID=$(json_value "ID")
+  echo "body = $HTTP_BODY"
+  echo "postID = $postID"
+  [ "$postID" -gt 0 ]
+  guid=$(json_value "Guid")
+  echo "guid = $guid"
+  [ "$guid" != "null" ]
   # check post in diaspora
   function cmd() {
-    query "d1" "select count(*) from posts;"
+    query "d1" "select count(*) from posts where guid = '$guid';"
+  }
+  code=$(wait_for cmd "1")
+  echo "expected 0, got $code"
+  [ "$code" -eq "0" ]
+
+  # create comment
+  post "comment=hellod1" "$endpoint/api/v0/posts/$postID/comments"
+  echo "expected 200, got $HTTP_STATUS_CODE"
+  [ "$HTTP_STATUS_CODE" == "000200" ]
+  guid=$(json_value "Guid")
+  echo "body = $HTTP_BODY"
+  echo "guid = $guid"
+  [ "$guid" != "null" ]
+  # check comment
+  function cmd() {
+    query "d1" "select count(*) from comments where guid = '$guid';"
+  }
+  code=$(wait_for cmd "1")
+  echo "expected 0, got $code"
+  [ "$code" -eq "0" ]
+
+  # create like
+  post "" "$endpoint/api/v0/posts/$postID/likes/true"
+  echo "expected 200, got $HTTP_STATUS_CODE"
+  [ "$HTTP_STATUS_CODE" == "000200" ]
+  guid=$(json_value "Guid")
+  echo "body = $HTTP_BODY"
+  echo "guid = $guid"
+  [ "$guid" != "null" ]
+  # check like
+  function cmd() {
+    query "d1" "select count(*) from likes where guid = '$guid';"
   }
   code=$(wait_for cmd "1")
   echo "expected 0, got $code"
