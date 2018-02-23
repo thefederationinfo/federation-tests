@@ -1,4 +1,7 @@
 #!/usr/bin/env bats
+#
+# All API calls are documented here: https://ganggo.github.io/api/
+#
 
 load test_helper
 
@@ -69,9 +72,14 @@ endpoint="http://localhost:9000"
   [ "$HTTP_STATUS_CODE" == "000200" ]
 }
 
-@test "create public entities and check federation" {
+function send_type() {
+  type=$1
+
+  aspectID=0
+  [ "$type" == "private" ] && aspectID=1
+
   # create post via ganggo
-  post "post=helloworld&aspectID=0" "$endpoint/api/v0/posts"
+  post "post=helloworld&aspectID=$aspectID" "$endpoint/api/v0/posts"
   echo "expected 200, got $HTTP_STATUS_CODE"
   [ "$HTTP_STATUS_CODE" == "000200" ]
   postID=$(json_value "ID")
@@ -83,7 +91,10 @@ endpoint="http://localhost:9000"
   [ "$guid" != "null" ]
   # check post in diaspora
   function cmd() {
-    query "d1" "select count(*) from posts where guid = '$guid';"
+    public="true"
+    [ "$type" == "private" ] && public="false"
+    query "d1" "select count(*) from posts
+                where guid = '$guid' and public = $public;"
   }
   code=$(wait_for cmd "1")
   echo "expected 0, got $code"
@@ -99,7 +110,8 @@ endpoint="http://localhost:9000"
   [ "$guid" != "null" ]
   # check comment
   function cmd() {
-    query "d1" "select count(*) from comments where guid = '$guid';"
+    query "d1" "select count(*) from comments
+                where guid = '$guid';"
   }
   code=$(wait_for cmd "1")
   echo "expected 0, got $code"
@@ -115,11 +127,20 @@ endpoint="http://localhost:9000"
   [ "$guid" != "null" ]
   # check like
   function cmd() {
-    query "d1" "select count(*) from likes where guid = '$guid';"
+    query "d1" "select count(*) from likes
+                where guid = '$guid';"
   }
   code=$(wait_for cmd "1")
   echo "expected 0, got $code"
   [ "$code" -eq "0" ]
+}
+
+@test "create public entities and check federation" {
+  send_type public
+}
+
+@test "create private entities and check federation" {
+  send_type private
 }
 
 @test "stop and delete containers" {
