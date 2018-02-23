@@ -4,13 +4,6 @@ load test_helper
 
 endpoint="http://localhost:9000"
 
-@test "curl and psql client exists" {
-  command -v psql
-  [ "$?" -eq 0 ]
-  command -v curl
-  [ "$?" -eq 0 ]
-}
-
 @test "create database" {
   psql -U postgres -c "create database g1;"
   [ "$?" -eq 0 ]
@@ -46,10 +39,10 @@ endpoint="http://localhost:9000"
        "$endpoint/api/v0/oauth/tokens"
   echo "expected 200, got $HTTP_STATUS_CODE"
   [ "$HTTP_STATUS_CODE" == "000200" ]
-  token=$(echo $HTTP_BODY |cut -d'"' -f 4)
+  token=$(json_value "token")
   echo "body = $HTTP_BODY"
   echo "token = $token"
-  [ "$token" != "" ]
+  [ "$token" != "null" ]
   echo "-H access_token:$token" > $curl_params
 }
 
@@ -58,7 +51,7 @@ endpoint="http://localhost:9000"
   post "handle=d1@localhost:3000" "$endpoint/api/v0/search"
   echo "expected 200, got $HTTP_STATUS_CODE"
   [ "$HTTP_STATUS_CODE" == "000200" ]
-  personID=$(echo $HTTP_BODY |sed -r 's/.*"ID":\s*([0-9]+),.*/\1/g')
+  personID=$(json_value "ID")
   echo "body = $HTTP_BODY"
   echo "personID = $personID"
   [ "$personID" -gt 0 ]
@@ -66,7 +59,7 @@ endpoint="http://localhost:9000"
   post "aspect_name=test" "$endpoint/api/v0/aspects"
   echo "expected 200, got $HTTP_STATUS_CODE"
   [ "$HTTP_STATUS_CODE" == "000200" ]
-  aspectID=$(echo $HTTP_BODY |sed -r 's/.*"ID":\s*([0-9]+),.*/\1/g')
+  aspectID=$(json_value "ID")
   echo "body = $HTTP_BODY"
   echo "aspectID = $aspectID"
   [ "$aspectID" -gt 0 ]
@@ -76,7 +69,7 @@ endpoint="http://localhost:9000"
   [ "$HTTP_STATUS_CODE" == "000200" ]
 }
 
-@test "create post and check federation" {
+@test "create post entities and check federation" {
   # create post via ganggo
   post "post=helloworld&aspectID=0" "$endpoint/api/v0/posts"
   echo "expected 200, got $HTTP_STATUS_CODE"
