@@ -10,7 +10,7 @@ endpoint="http://localhost:9000"
 }
 
 @test "start ganggo#1 server" {
-  start_app "g1" "9000" "testing_ganggo:v1.0.0-ganggo"
+  start_app "g1" "9000" "testing_ganggo:"$(latest_tag "ganggo")
   [ "$?" -eq 0 ]
   code=$(wait_for "docker logs g1" "Listening on")
   echo "expected 0, got $code"
@@ -18,7 +18,7 @@ endpoint="http://localhost:9000"
 }
 
 @test "start diaspora#1 server" {
-  start_app "d1" "3000" "testing_diaspora:v1.0.3-diaspora"
+  start_app "d1" "3000" "testing_diaspora:"$(latest_tag "diaspora")
   [ "$?" -eq 0 ]
   code=$(wait_for "docker logs d1" "Starting Diaspora in production")
   echo "expected 0, got $code"
@@ -69,7 +69,7 @@ endpoint="http://localhost:9000"
   [ "$HTTP_STATUS_CODE" == "000200" ]
 }
 
-@test "create post entities and check federation" {
+@test "create public entities and check federation" {
   # create post via ganggo
   post "post=helloworld&aspectID=0" "$endpoint/api/v0/posts"
   echo "expected 200, got $HTTP_STATUS_CODE"
