@@ -5,7 +5,7 @@ if [ ! -z ${PRSHA} ]; then
   user=$(echo $PRREPO |cut -d'/' -f1)
   userrepo=$(echo $PRREPO |cut -d'/' -f2)
   wd=$repo
-  if [ "$userrepo" -eq "federation" ]; then
+  if [ "$userrepo" -eq "federation.git" ]; then
     wd=$repo/vendor/github.com/ganggo/federation
   fi
   cd $wd \
