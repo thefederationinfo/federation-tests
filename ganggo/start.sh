@@ -2,17 +2,26 @@
 
 repo=$GOPATH/src/github.com/ganggo/ganggo
 if [ ! -z ${PRSHA} ]; then
-  user=$(echo $PRREPO |cut -d'/' -f1)
-  userrepo=$(echo $PRREPO |cut -d'/' -f2)
-  wd=$repo
-  if [ "$userrepo" -eq "federation.git" ]; then
-    wd=$repo/vendor/github.com/ganggo/federation
+  if [ "$(basename $PRREPO)" == "ganggo.git" ]; then
+    cd $repo && git stash \
+      && git remote add custom $PRREPO \
+      && git fetch custom \
+      && git checkout $PRSHA \
+      && git log -1 || {
+        echo "Cannot find $PRREPO $PRSHA"
+        exit 1
+      }
   fi
-  cd $wd \
-    && git remote add custom https://github.com/$user/$userrepo.git \
-    && git fetch custom \
-    && git checkout $PRSHA \
-    && git log -1
+  if [ "$(basename $PRREPO)" == "federation.git" ]; then
+    wd=$repo/vendor/github.com/ganggo/federation
+    rm -r $wd && git clone $PRREPO $wd \
+      && cd $wd \
+      && git checkout $PRSHA \
+      && git log -1 || {
+        echo "Cannot checkout $PRREPO $PRSHA"
+        exit 1
+      }
+  fi
 fi
 
 sed -i "s/NAME/$DATABASE/g" $repo/conf/app.conf \
