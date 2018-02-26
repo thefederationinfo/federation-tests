@@ -100,7 +100,7 @@ function send_type() {
     query "d1" "select count(*) from posts
                 where guid = '$guid' and public = $public;"
   }
-  code=$(wait_for cmd "1")
+  code=$(wait_for cmd "1" 120)
   echo "expected 0, got $code"
   [ "$code" -eq "0" ]
 
@@ -117,7 +117,7 @@ function send_type() {
     query "d1" "select count(*) from comments
                 where guid = '$guid';"
   }
-  code=$(wait_for cmd "1")
+  code=$(wait_for cmd "1" 120)
   echo "expected 0, got $code"
   [ "$code" -eq "0" ]
 
@@ -134,7 +134,7 @@ function send_type() {
     query "d1" "select count(*) from likes
                 where guid = '$guid';"
   }
-  code=$(wait_for cmd "1")
+  code=$(wait_for cmd "1" 120)
   echo "expected 0, got $code"
   [ "$code" -eq "0" ]
 }

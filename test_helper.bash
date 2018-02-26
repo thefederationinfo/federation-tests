@@ -55,16 +55,20 @@ function remove_app() {
   docker rm $1
 }
 
-# wait_for "docker logs g1" "Listening on"
+# wait_for "docker logs g1" "Listening on" 120
 function wait_for() {
+  timeout=500
+  if [[ $3 =~ '^[0-9]+$' ]] ; then
+    timeout=$3
+  fi
   command -v $1 >/dev/null
   if [ "$?" -ne 0 ]; then echo 1; return; fi
   while true; do
     $1 |grep -m 1 "$2" >/dev/null
     if [ "$?" -eq 0 ]; then echo 0; break; fi
-    if [ "$i" -eq 250 ]; then echo 1; break; fi
+    if [ "$i" -eq $timeout ]; then echo 1; break; fi
     ((i++))
-    sleep 2
+    sleep 1
   done
 }
 
