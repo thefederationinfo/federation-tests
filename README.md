@@ -1,39 +1,75 @@
 # Federation Tests [![](https://travis-ci.org/thefederationinfo/federation-tests.svg?branch=master)](https://travis-ci.org/thefederationinfo/federation-tests)
 
-This repository is about automating federation tests in the network itself (see [the-federation.info](http://the-federation.info/)).
+This repository is about automating federation tests in the network itself!
 
-# Layout
+* [the-federation.info](https://the-federation.info/)
+* [testsuite.the-federation.info](https://testsuite.the-federation.info/)
 
-Every image has to accept and use following parameters:
+# Add your project
 
-    PORT=\d+
-    DATABASE=[\w\d]+
+Clone this repository and create a new directory:
 
-`DATABASE` represents the name of the docker container and the database name.  
-`PORT` should be an unused port (check already existing container). All docker container will be executed with `--net=host` and will share the same network host. Therefore a unique port number is mandatory!
+    git clone https://github.com/thefederationinfo/federation-tests.git
+    cd federation-tests && mkdir <project-name>
+ 
+In this folder you have to put everything which is required for building an automated docker image.
+Starting with a `Dockerfile` and a start-up script e.g. `start.sh`
 
-The test helper will call docker like following:
+The start-up script is required so that we can do some configuration magic at boot time.
 
-    docker run --name=$1 -e DATABASE=$1 -e PORT=$2 -p $2:$2 --net=host -d thefederation/$3
-    
-Starting a GangGo and Diaspora application server is then possible by writing tests like this:
+Following environment variables will be available while tests are running:
+
+    $DATABASE (on every run)
+    $PORT     (on every run)
+    $PRREPO   (only on pull_requests from a user)
+    $PRSHA    (only on pull_requests from a user)
+
+This information we can use in our start-up script mentioned above.  
+For example if `PRREPO` and `PRSHA` is set we probably want to checkout the source code of the pull request first.
+
+Checkout for reference the start-up script of the ganggo image:
 
 ```
-@test "start ganggo#1 server" {
-  start_app "g1" "9000" "testing_ganggo:v1.0.0-ganggo"
-  [ "$?" -eq 0 ]
-  code=$(wait_for "docker logs g1" "Listening on")
-  echo "expected 0, got $code"
-  [ "$code" -eq "0" ]
-}
+#!/bin/bash
 
-@test "start diaspora#1 server" {
-  start_app "d1" "3000" "testing_diaspora:v1.0.3-diaspora"
-  [ "$?" -eq 0 ]
-  code=$(wait_for "docker logs d1" "Starting Diaspora in production")
-  echo "expected 0, got $code"
-  [ "$code" -eq "0" ]
-  # unicorn timeout
-  sleep 15
-}
+repo=$GOPATH/src/github.com/ganggo/ganggo
+if [ ! -z ${PRSHA} ]; then
+  if [ "$(basename $PRREPO)" == "ganggo.git" ]; then
+    cd $repo && git stash \
+      && git remote add custom $PRREPO \
+      && git fetch custom \
+      && git checkout $PRSHA \
+      && git log -1 || {
+        echo "Cannot find $PRREPO $PRSHA"
+        exit 1
+      }
+  fi
+  if [ "$(basename $PRREPO)" == "federation.git" ]; then
+    wd=$repo/vendor/github.com/ganggo/federation
+    rm -r $wd && git clone $PRREPO $wd \
+      && cd $wd \
+      && git checkout $PRSHA \
+      && git log -1 || {
+        echo "Cannot checkout $PRREPO $PRSHA"
+        exit 1
+      }
+  fi
+fi
+
+sed -i "s/NAME/$DATABASE/g" $repo/conf/app.conf \
+  && sed -i "s/PORT/$PORT/g" $repo/conf/app.conf \
+  && revel run github.com/ganggo/ganggo
 ```
+
+In the above example support for `github.com/ganggo/federation` and `github.com/ganggo/ganggo` was added.  
+If a user triggers a build with the following parameters:
+
+    PRREPO=https://github.com/someuser/federation.git
+    PRSHA=1234567890
+
+The testsuite will replace the offical with the user repository and checkout the mentioned commit.
+
+If you did all that `\m/` Create a pull-request with your changes in this repository and as soon as we merged it.  
+You can add your repository [here](https://testsuite.the-federation.info/auth)!
+
+Now the testing can begin :)
