@@ -42,7 +42,14 @@ function get() {
 
 # start_app "g1" "3000" "testing_diaspora:v1.0.1"
 function start_app() {
-  docker run --name=$1 -e DATABASE=$1 -e PORT=$2 -p $2:$2 --net=host -d thefederation/$3
+  params=""
+  if [ ! -z ${PRSHA} ]; then
+    echo "!!!!!!! Custom build active !!!!!!!"
+    echo "Using repository $PRREPO"
+    echo "With SHA $PRSHA"
+    params="-e PRSHA=$PRSHA -e PRREPO=$PRREPO"
+  fi
+  docker run --name=$1 $params -e DATABASE=$1 -e PORT=$2 -p $2:$2 --net=host -d thefederation/$3
 }
 
 # stop_app "g1"
