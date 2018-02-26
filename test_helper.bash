@@ -95,10 +95,9 @@ function latest_tag() {
     label=$(echo $tag |cut -d- -f2)
     if [ "$label" == "$1" ]; then
       echo $tag
-      return
+      break
     fi
   done
-  echo null
 }
 
 # rails_runner "d1" "puts 'Hello World!'"
