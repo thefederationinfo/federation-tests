@@ -5,7 +5,13 @@ This repository is about automating federation tests in the network itself!
 * [the-federation.info](https://the-federation.info/)
 * [testsuite.the-federation.info](https://testsuite.the-federation.info/)
 
-# Add your project
+## Projects
+
+Following projects are using the testsuite:
+
+* [GangGo](https://github.com/ganggo)
+
+## Add your project
 
 Clone this repository and create a new directory:
 
