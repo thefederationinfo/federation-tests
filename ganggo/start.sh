@@ -1,7 +1,7 @@
 #!/bin/bash
 
 repo=$GOPATH/src/github.com/ganggo/ganggo
-if [ ! -z ${PRSHA} ]; then
+if [ "$PROJECT" == "ganggo" ]; then
   if [ "$(basename $PRREPO)" == "ganggo.git" ]; then
     cd $repo && git stash \
       && git remote add custom $PRREPO \
