@@ -30,7 +30,7 @@ gngg_endpnt="http://localhost:9000"
 @test "$btf create ganggo user" {
   post "username=g1&password=pppppp&confirm=pppppp" "$gngg_endpnt/users/sign_up"
   echo "expected 302, got $HTTP_STATUS_CODE"
-  [ "$HTTP_STATUS_CODE" == "000302" ]
+  [ "$HTTP_STATUS_CODE" == "302" ]
 }
 
 @test "$btf create diaspora user" {

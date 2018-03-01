@@ -1,4 +1,8 @@
 export btf=$(basename $BATS_TEST_FILENAME)
+export curl_params="/tmp/curl_params"
+
+unset HTTP_STATUS_CODE
+unset HTTP_BODY
 
 # will run on every test and
 # verify installed dependencies
@@ -17,17 +21,23 @@ function setup() {
   [ "$?" -eq 0 ]
 }
 
-curl_params="/tmp/curl_params"
 # fetch "POST" "data1=one&data2=two" "http://server/endpoint"
 function fetch() {
   tmp=$(mktemp)
+
+  unset params
   [ -f "$curl_params" ] && params=$(cat $curl_params)
-  [ "$2" != "" ] && params="$params -d $2"
-  params="$params -s -O /dev/null -o $tmp -X $1 -w %{http_code}"
-  echo "exec: curl $params $3"
-  export HTTP_STATUS_CODE=$(curl $params $3)
-  export HTTP_BODY=$(cat $tmp)
-  rm $tmp
+  [ "$2" != "" ] && params="$params -d '$2'"
+  params="$params -k -D $tmp -s -X $1"
+
+  export HTTP_BODY=$(eval "curl $params $3")
+  export HTTP_STATUS_CODE=$(head -n1 $tmp |cut -d' ' -f2)
+  echo "curl = '$params $3'"
+  echo "HTTP_STATUS_CODE = $HTTP_STATUS_CODE"
+  echo "HTTP_BODY = $HTTP_BODY"
+
+  rm -v $tmp
+  [ "$?" -eq 0 ]
 }
 
 # post "data1=one&data2=two" "http://server/endpoint"

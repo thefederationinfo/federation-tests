@@ -33,7 +33,7 @@ endpoint="http://localhost:9000"
 @test "$btf create user" {
   post "username=g1&password=pppppp&confirm=pppppp" "$endpoint/users/sign_up"
   echo "expected 302, got $HTTP_STATUS_CODE"
-  [ "$HTTP_STATUS_CODE" == "000302" ]
+  [ "$HTTP_STATUS_CODE" == "302" ]
 }
 
 @test "$btf create diaspora user" {
@@ -45,7 +45,7 @@ endpoint="http://localhost:9000"
   post "grant_type=password&username=g1&password=pppppp&client_id=bats" \
        "$endpoint/api/v0/oauth/tokens"
   echo "expected 200, got $HTTP_STATUS_CODE"
-  [ "$HTTP_STATUS_CODE" == "000200" ]
+  [ "$HTTP_STATUS_CODE" == "200" ]
   token=$(json_value "token")
   echo "body = $HTTP_BODY"
   echo "token = $token"
@@ -57,7 +57,7 @@ endpoint="http://localhost:9000"
   # search and discover a person
   post "handle=d1@localhost:3000" "$endpoint/api/v0/search"
   echo "expected 200, got $HTTP_STATUS_CODE"
-  [ "$HTTP_STATUS_CODE" == "000200" ]
+  [ "$HTTP_STATUS_CODE" == "200" ]
   personID=$(json_value "ID")
   echo "body = $HTTP_BODY"
   echo "personID = $personID"
@@ -65,7 +65,7 @@ endpoint="http://localhost:9000"
   # create a new aspect
   post "aspect_name=test" "$endpoint/api/v0/aspects"
   echo "expected 200, got $HTTP_STATUS_CODE"
-  [ "$HTTP_STATUS_CODE" == "000200" ]
+  [ "$HTTP_STATUS_CODE" == "200" ]
   aspectID=$(json_value "ID")
   echo "body = $HTTP_BODY"
   echo "aspectID = $aspectID"
@@ -73,7 +73,7 @@ endpoint="http://localhost:9000"
   # start sharing with person
   post "" "$endpoint/api/v0/people/$personID/aspects/$aspectID"
   echo "expected 200, got $HTTP_STATUS_CODE"
-  [ "$HTTP_STATUS_CODE" == "000200" ]
+  [ "$HTTP_STATUS_CODE" == "200" ]
 }
 
 function send_type() {
@@ -85,7 +85,7 @@ function send_type() {
   # create post via ganggo
   post "post=helloworld&aspectID=$aspectID" "$endpoint/api/v0/posts"
   echo "expected 200, got $HTTP_STATUS_CODE"
-  [ "$HTTP_STATUS_CODE" == "000200" ]
+  [ "$HTTP_STATUS_CODE" == "200" ]
   postID=$(json_value "ID")
   echo "body = $HTTP_BODY"
   echo "postID = $postID"
@@ -107,7 +107,7 @@ function send_type() {
   # create comment
   post "comment=hellod1" "$endpoint/api/v0/posts/$postID/comments"
   echo "expected 200, got $HTTP_STATUS_CODE"
-  [ "$HTTP_STATUS_CODE" == "000200" ]
+  [ "$HTTP_STATUS_CODE" == "200" ]
   guid=$(json_value "Guid")
   echo "body = $HTTP_BODY"
   echo "guid = $guid"
@@ -124,7 +124,7 @@ function send_type() {
   # create like
   post "" "$endpoint/api/v0/posts/$postID/likes/true"
   echo "expected 200, got $HTTP_STATUS_CODE"
-  [ "$HTTP_STATUS_CODE" == "000200" ]
+  [ "$HTTP_STATUS_CODE" == "200" ]
   guid=$(json_value "Guid")
   echo "body = $HTTP_BODY"
   echo "guid = $guid"
