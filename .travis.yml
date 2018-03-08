@@ -6,9 +6,11 @@ language: go
 services:
 - postgresql
 - docker
+- redis
 matrix:
   include:
   - env: PROJECT=diaspora
   - env: PROJECT=ganggo
+  - env: PROJECT=mastodon
 install: bash scripts/install.sh
 script: bats --tap $(find . -name $PROJECT'*.bats')
