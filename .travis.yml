@@ -6,6 +6,7 @@ language: go
 services:
 - postgresql
 - docker
+- redis
 matrix:
   include:
   - env: PROJECT=diaspora
