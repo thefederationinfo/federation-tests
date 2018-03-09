@@ -75,16 +75,41 @@ function remove_app() {
 # wait_for "docker logs g1" "Listening on" 120
 function wait_for() {
   timeout=500
-  if [[ $3 =~ '^[0-9]+$' ]] ; then
+  if [[ "$3" =~ ^[0-9]+$ ]] ; then
     timeout=$3
   fi
   command -v $1 >/dev/null
   if [ "$?" -ne 0 ]; then echo 1; return; fi
-  while true; do
-    $1 |grep -m 1 "$2" >/dev/null
-    if [ "$?" -eq 0 ]; then echo 0; break; fi
-    if [ "$i" -eq $timeout ]; then echo 1; break; fi
+
+  i=0; while true; do
+    if [ "$i" -gt "$timeout" ]; then break; fi
     ((i++))
+    sleep 1
+  done & >/dev/null 2>&1
+  TIMEOUT_PID=$!
+
+  while true; do
+    $1 |grep -m 1 "$2" >/dev/null 2>&1
+    if [ "$?" -eq 0 ]; then break; fi
+    sleep 1
+  done & >/dev/null 2>&1
+  CMD_PID=$!
+
+  while true; do
+    # check timeout child
+    kill -0 $TIMEOUT_PID >/dev/null 2>&1
+    if [ "$?" -gt 0 ]; then
+      kill -9 $CMD_PID
+      echo 1
+      break
+    fi
+    # check cmd child
+    kill -0 $CMD_PID >/dev/null 2>&1
+    if [ "$?" -gt 0 ]; then
+      kill -9 $TIMEOUT_PID
+      echo 0
+      break
+    fi
     sleep 1
   done
 }
