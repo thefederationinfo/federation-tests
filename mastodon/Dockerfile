@@ -68,8 +68,22 @@ RUN chown -R mastodon:mastodon /mastodon
 
 USER mastodon
 RUN bundle config build.nokogiri --with-iconv-lib=/usr/local/lib --with-iconv-include=/usr/local/include
-RUN bundle install
+RUN bundle install --without test
 RUN yarn install --pure-lockfile
+
+# XXX workaround for ruby goldfinger gem
+# adds the ability to search profiles via http
+# (see https://github.com/tootsuite/goldfinger/pull/2)
+RUN sed -i 's/https/http/' \
+  /usr/local/bundle/gems/goldfinger-*/lib/goldfinger/client.rb
+
+# XXX disable redis; redis received all jobs but
+# didn't execute them. bypassing it now till
+# someone with more knowledge comes around
+RUN echo -e "if Rails.env.development?\n"\
+  "require 'sidekiq/testing'\n"\
+  "Sidekiq::Testing.inline!\n"\
+  "end" >> config/initializers/sidekiq.rb
 
 COPY .env /mastodon/.env
 COPY start.sh /start.sh
