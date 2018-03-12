@@ -7,7 +7,7 @@ endpoint="http://localhost:3000"
 @test "$btf start mastodon#1 server" {
   start_app "m1" "3000" "testing_mastodon:"$(latest_tag "mastodon")
   [ "$?" -eq 0 ]
-  code=$(wait_for "docker logs m1" "webpack: Compiled successfully.")
+  code=$(wait_for_mastodon "m1")
   echo "expected 0, got $code"
   [ "$code" -eq "0" ]
 }
@@ -15,7 +15,7 @@ endpoint="http://localhost:3000"
 @test "$btf start mastodon#2 server" {
   start_app "m2" "3001" "testing_mastodon:"$(latest_tag "mastodon")
   [ "$?" -eq 0 ]
-  code=$(wait_for "docker logs m2" "Use Ctrl-C to stop")
+  code=$(wait_for_mastodon "m2")
   echo "expected 0, got $code"
   [ "$code" -eq "0" ]
 }
@@ -38,6 +38,7 @@ endpoint="http://localhost:3000"
 }
 
 @test "$btf follow admin@localhost:3001" {
+  post "uri=admin@localhost:3001" "$endpoint/api/v1/follows"
   post "uri=admin@localhost:3001" "$endpoint/api/v1/follows"
   echo "HTTP_STATUS_CODE = $HTTP_STATUS_CODE"
   [ "$HTTP_STATUS_CODE" == "200" ]

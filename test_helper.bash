@@ -72,6 +72,15 @@ function remove_app() {
   docker rm $1
 }
 
+# wait_for_mastodon "m1"
+function wait_for_mastodon() {
+  instance=$1
+  function cmd() {
+    docker logs $instance 2>&1 |grep 'webpack: Compiled successfully' |wc -l
+  }
+  wait_for cmd "2"
+}
+
 # wait_for "docker logs g1" "Listening on" 120
 function wait_for() {
   timeout=500
