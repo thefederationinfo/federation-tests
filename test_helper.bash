@@ -70,7 +70,7 @@ function start_app() {
     echo "!!!!!!! Custom build active !!!!!!!"
     echo "Using repository $PRREPO"
     echo "With SHA $PRSHA"
-    params="-e PRSHA=$PRSHA -e PRREPO=$PRREPO"
+    params="-e PROJECT=$PROJECT -e PRSHA=$PRSHA -e PRREPO=$PRREPO"
   fi
   echo "Starting docker container $1 (thefederation/$3) on port $2"
   docker run --name=$1 $params -e DATABASE=$1 -e PORT=$2 -p $2:$2 --net=host -d thefederation/$3
