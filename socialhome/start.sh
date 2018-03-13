@@ -14,6 +14,7 @@ if [ "$PROJECT" == "socialhome" ]; then
   # re-install dependencies
   cd /socialhome \
     && pip-sync dev-requirements.txt \
+    && npm install \
     && manage.py migrate \
     && npm run dev
 fi
