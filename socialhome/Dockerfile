@@ -20,8 +20,11 @@ RUN bower install --allow-root
 RUN npm -g install grunt
 RUN npm run build
 
-# XXX workaround for validating localhost domain name
+# NOTE workaround for validating localhost domain name
 RUN sed -i 's/\\\.//' src/federation/federation/utils/text.py
+
+# NOTE enable key generation in development mode
+RUN sed -i 's/SOCIALHOME_GENERATE_USER_RSA_KEYS_ON_SAVE = False/SOCIALHOME_GENERATE_USER_RSA_KEYS_ON_SAVE = True/' config/settings/local.py
 
 # XXX hotfix http fallback support in development mode
 # see https://github.com/jaywink/federation/issues/120
