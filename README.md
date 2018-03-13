@@ -10,6 +10,7 @@ This repository is about automating federation tests in the network itself!
 Following projects are using the testsuite:
 
 * [GangGo](https://github.com/ganggo)
+* [Socialhome](https://github.com/jaywink/socialhome)
 
 ## Add your project
 

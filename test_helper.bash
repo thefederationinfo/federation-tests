@@ -21,18 +21,26 @@ function setup() {
   [ "$?" -eq 0 ]
 }
 
-# fetch "POST" "data1=one&data2=two" "http://server/endpoint"
+# fetch "POST" "data1=one&data2=two" "url" "http://server/endpoint"
 function fetch() {
   tmp=$(mktemp)
 
   unset params
-  [ -f "$curl_params" ] && params=$(cat $curl_params)
-  [ "$2" != "" ] && params="$params -d '$2'"
-  params="$params -k -D $tmp -s -X $1"
+  unset field_params
 
-  export HTTP_BODY=$(eval "curl $params $3")
+  [ -f "$curl_params" ] && params=$(cat $curl_params)
+  if [[ "$3" == "url" ]]; then field_params="-d '$2'"
+  else
+    IFS='&' read -ra reqparams <<< "$2"
+    for reqparam in ${reqparams[@]}; do
+      field_params="$field_params -F '$reqparam'"
+    done
+  fi
+  params="$params $field_params -k -D $tmp -s -X $1"
+
+  echo "curl $params $4"
+  export HTTP_BODY=$(eval "curl $params $4")
   export HTTP_STATUS_CODE=$(head -n1 $tmp |cut -d' ' -f2)
-  echo "curl = '$params $3'"
   echo "HTTP_STATUS_CODE = $HTTP_STATUS_CODE"
   echo "HTTP_BODY = $HTTP_BODY"
 
@@ -40,14 +48,19 @@ function fetch() {
   [ "$?" -eq 0 ]
 }
 
+# post_form "data1=one&data2=two" "http://server/endpoint"
+function post_form() {
+  fetch "POST" "$1" "form" "$2"
+}
+
 # post "data1=one&data2=two" "http://server/endpoint"
 function post() {
-  fetch "POST" "$1" "$2"
+  fetch "POST" "$1" "url" "$2"
 }
 
 # get "http://server/endpoint?data1=one&data2=two"
 function get() {
-  fetch "GET" "" "$1"
+  fetch "GET" "" "url" "$1"
 }
 
 # start_app "g1" "3000" "testing_diaspora:v1.0.1"
@@ -99,7 +112,7 @@ function wait_for() {
   TIMEOUT_PID=$!
 
   while true; do
-    $1 |grep -m 1 "$2" >/dev/null 2>&1
+    $1 2>&1 |grep -m 1 "$2" >/dev/null
     if [ "$?" -eq 0 ]; then break; fi
     sleep 1
   done & >/dev/null 2>&1

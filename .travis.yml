@@ -12,5 +12,6 @@ matrix:
   - env: PROJECT=diaspora
   - env: PROJECT=ganggo
   - env: PROJECT=mastodon
+  - env: PROJECT=socialhome
 install: bash scripts/install.sh
 script: bats --tap $(find . -name $PROJECT'*.bats')
