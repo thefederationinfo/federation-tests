@@ -5,7 +5,7 @@ load test_helper
 endpoint="http://localhost:3000"
 
 @test "$btf start mastodon#1 server" {
-  start_app "m1" "3000" "testing_mastodon:"$(latest_tag "mastodon")
+  start_app "m1" "3000" "testing_mastodon"$(latest_tag "mastodon")
   [ "$?" -eq 0 ]
   code=$(wait_for_mastodon "m1")
   echo "expected 0, got $code"
@@ -13,7 +13,7 @@ endpoint="http://localhost:3000"
 }
 
 @test "$btf start mastodon#2 server" {
-  start_app "m2" "3001" "testing_mastodon:"$(latest_tag "mastodon")
+  start_app "m2" "3001" "testing_mastodon"$(latest_tag "mastodon")
   [ "$?" -eq 0 ]
   code=$(wait_for_mastodon "m2")
   echo "expected 0, got $code"

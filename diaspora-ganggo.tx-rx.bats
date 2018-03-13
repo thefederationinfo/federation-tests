@@ -1,6 +1,7 @@
 # vim:ft=sh
 
 load test_helper
+load ganggo_helper
 
 gngg_endpnt="http://localhost:9000"
 
@@ -10,15 +11,11 @@ gngg_endpnt="http://localhost:9000"
 }
 
 @test "$btf start ganggo#1 server" {
-  start_app "g1" "9000" "testing_ganggo:"$(latest_tag "ganggo")
-  [ "$?" -eq 0 ]
-  code=$(wait_for "docker logs g1" "Listening on")
-  echo "expected 0, got $code"
-  [ "$code" -eq "0" ]
+  ganggo_start_server g1 "9000"
 }
 
 @test "$btf start diaspora#1 server" {
-  start_app "d1" "3000" "testing_diaspora:"$(latest_tag "diaspora")
+  start_app "d1" "3000" "testing_diaspora"$(latest_tag "diaspora")
   [ "$?" -eq 0 ]
   code=$(wait_for "docker logs d1" "Starting Diaspora in production")
   echo "expected 0, got $code"
@@ -28,9 +25,7 @@ gngg_endpnt="http://localhost:9000"
 }
 
 @test "$btf create ganggo user" {
-  post "username=g1&password=pppppp&confirm=pppppp" "$gngg_endpnt/users/sign_up"
-  echo "expected 302, got $HTTP_STATUS_CODE"
-  [ "$HTTP_STATUS_CODE" == "302" ]
+  ganggo_create_user g1 $gngg_endpnt
 }
 
 @test "$btf create diaspora user" {

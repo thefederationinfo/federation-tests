@@ -4,6 +4,7 @@
 #
 
 load test_helper
+load ganggo_helper
 
 endpoint="http://localhost:9000"
 
@@ -13,15 +14,11 @@ endpoint="http://localhost:9000"
 }
 
 @test "$btf start ganggo#1 server" {
-  start_app "g1" "9000" "testing_ganggo:"$(latest_tag "ganggo")
-  [ "$?" -eq 0 ]
-  code=$(wait_for "docker logs g1" "Listening on")
-  echo "expected 0, got $code"
-  [ "$code" -eq "0" ]
+  ganggo_start_server g1 "9000"
 }
 
 @test "$btf start diaspora#1 server" {
-  start_app "d1" "3000" "testing_diaspora:"$(latest_tag "diaspora")
+  start_app "d1" "3000" "testing_diaspora"$(latest_tag "diaspora")
   [ "$?" -eq 0 ]
   code=$(wait_for "docker logs d1" "Starting Diaspora in production")
   echo "expected 0, got $code"
@@ -31,49 +28,19 @@ endpoint="http://localhost:9000"
 }
 
 @test "$btf create user" {
-  post "username=g1&password=pppppp&confirm=pppppp" "$endpoint/users/sign_up"
-  echo "expected 302, got $HTTP_STATUS_CODE"
-  [ "$HTTP_STATUS_CODE" == "302" ]
+  ganggo_create_user g1 $endpoint
 }
 
 @test "$btf create diaspora user" {
   skip "exists already"
 }
 
-# according to https://ganggo.github.io/api/#api-Oauth-ApiOAuth_Create
 @test "$btf fetch user token" {
-  post "grant_type=password&username=g1&password=pppppp&client_id=bats" \
-       "$endpoint/api/v0/oauth/tokens"
-  echo "expected 200, got $HTTP_STATUS_CODE"
-  [ "$HTTP_STATUS_CODE" == "200" ]
-  token=$(json_value "token")
-  echo "body = $HTTP_BODY"
-  echo "token = $token"
-  [ "$token" != "null" ]
-  echo "-H access_token:$token" > $curl_params
+  ganggo_fetch_token g1 $endpoint
 }
 
 @test "$btf setup user relations" {
-  # search and discover a person
-  post "handle=d1@localhost:3000" "$endpoint/api/v0/search"
-  echo "expected 200, got $HTTP_STATUS_CODE"
-  [ "$HTTP_STATUS_CODE" == "200" ]
-  personID=$(json_value "ID")
-  echo "body = $HTTP_BODY"
-  echo "personID = $personID"
-  [ "$personID" -gt 0 ]
-  # create a new aspect
-  post "aspect_name=test" "$endpoint/api/v0/aspects"
-  echo "expected 200, got $HTTP_STATUS_CODE"
-  [ "$HTTP_STATUS_CODE" == "200" ]
-  aspectID=$(json_value "ID")
-  echo "body = $HTTP_BODY"
-  echo "aspectID = $aspectID"
-  [ "$aspectID" -gt 0 ]
-  # start sharing with person
-  post "" "$endpoint/api/v0/people/$personID/aspects/$aspectID"
-  echo "expected 200, got $HTTP_STATUS_CODE"
-  [ "$HTTP_STATUS_CODE" == "200" ]
+  ganggo_start_sharing "d1@localhost:3000" $endpoint
 }
 
 function send_type() {
