@@ -1,4 +1,4 @@
-#!/usr/bin/env bats
+# vim:ft=sh
 #
 # All API calls are documented here: https://ganggo.github.io/api/
 #

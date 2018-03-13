@@ -1,4 +1,4 @@
-#!/usr/bin/env bats
+# vim:ft=sh
 
 load test_helper
 
