@@ -80,3 +80,45 @@ If you did all that `\m/` Create a pull-request with your changes in this reposi
 You can add your repository [here](https://testsuite.the-federation.info/auth)!
 
 Now the testing can begin :)
+
+# Development
+
+## Dependencies
+
+In case you want to test specific parts locally you need `postgresql`, `docker` and `redis`.
+Make sure they are up and running:
+
+    sudo systemctl start redis.service postgresql.service docker.service
+
+Then you can install the testsuite dependencies:
+
+* github.com/stedolan/jq
+* github.com/sstephenson/bats
+
+Simply run the install script or do it manually:
+
+    bash scripts/install.sh
+
+## Run tests
+
+After installing all required dependencies you can start single tests via:
+
+    # bats <test-file> e.g.:
+    bats ganggo-ganggo.tx-rx.bats
+
+Or run all tests with a single command:
+
+    bats .
+
+## Run images
+
+Sometimes doing tests manually helps developing a new feature. You can run single docker images by using the helper script.
+Setup the environment by executing following command once:
+
+    BATS_TEST_FILENAME=local . ./test_helper.bash
+
+Then starting can be done by executing:
+
+    # start_app <database-name> <port> "testing_<project>"$(latest_tag <project>)
+    # for starting a ganggo image that could look like following:
+    start_app g1 9000 "testing_ganggo"$(latest_tag "ganggo")
