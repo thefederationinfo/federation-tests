@@ -14,6 +14,10 @@ if [ "$PROJECT" == "ganggo" ]; then
       echo "Cannot find $PRREPO $PRSHA"
       exit 1
     }
+
+  # install new dependencies
+  # and compile assets
+  make install precompile
 fi
 
 sed -i "s/NAME/$DATABASE/g" $repo/conf/app.conf \
