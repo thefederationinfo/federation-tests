@@ -1,16 +1,21 @@
 #!/bin/bash
 
+repo=/socialhome
 if [ "$PROJECT" == "socialhome" ]; then
-  if [ "$(basename $PRREPO)" == "socialhome.git" ]; then
-    cd /socialhome \
-      && git remote add custom $PRREPO \
-      && git fetch custom \
-      && git checkout $PRSHA \
-      && git log -1 || {
-        echo "Cannot find $PRREPO $PRSHA"
-        exit 1
-      }
+  if [ "$(basename $PRREPO)" == "federation.git" ]; then
+    repo=$repo/src/federation
+    rm -r $repo && git clone \
+      https://github.com/jaywink/federation.git $repo
   fi
+
+  cd $repo && git stash \
+    && git remote add custom $PRREPO \
+    && git fetch custom \
+    && git merge $PRSHA \
+    && git log -1 || {
+      echo "Cannot find $PRREPO $PRSHA"
+      exit 1
+    }
 
   # re-install dependencies
   cd /socialhome \
@@ -18,17 +23,6 @@ if [ "$PROJECT" == "socialhome" ]; then
     && npm install \
     && manage.py migrate \
     && npm run dev
-
-  if [ "$(basename $PRREPO)" == "federation.git" ]; then
-    rm -vr /socialhome/src/federation \
-      && git clone $PRREPO /socialhome/src/federation \
-      && cd /socialhome/src/federation \
-      && git checkout $PRSHA \
-      && git log -1 || {
-        echo "Cannot find $PRREPO $PRSHA"
-        exit 1
-      }
-  fi
 fi
 
 # NOTE workaround for validating localhost domain name
